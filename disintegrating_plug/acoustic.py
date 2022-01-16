@@ -13,12 +13,12 @@ from rhd import (
 
 df = sympy.Symbol('delta f', real=True)
 dpsi = sympy.Symbol('delta psi', real=True)
+omega = sympy.Symbol('omega', real=True)
 
 def calc_acoustic_equations():
 
     epsilon = sympy.Symbol('epsilon', positive=True)
     p_0 = sympy.Symbol('p_0', positive=True)
-    omega = sympy.Symbol('omega', real=True)
     k = sympy.Symbol('k', positive=True)
     xi = sympy.Symbol('xi', positive=True)
 
@@ -43,6 +43,29 @@ def calc_dispersion_matrix():
         [[itm.diff(var)
           for var in [df, dpsi]]
          for itm in _])
+
+def calc_dispersion_equation():
+
+    _ = calc_dispersion_matrix()
+    return _.det()
+
+def calc_amplitude_ratio():
+
+    xi = sympy.Symbol('xi', positive=True)
+
+    M = calc_dispersion_matrix()
+    eqn = M.det()
+    omega_sol = sympy.solve(eqn, omega)[1]
+    _ = M
+    _ = _.subs(omega, omega_sol)
+    _ = _.subs(eta, xi**2+1)
+    _.simplify()
+    _ = _.nullspace()
+    _ = _[0]
+    _ = _[0]/_[1]
+    _ = sympy.together(_)
+    _ = _.subs(xi, sympy.sqrt(eta-1))
+    return _
 
 if __name__ == '__main__':
 
