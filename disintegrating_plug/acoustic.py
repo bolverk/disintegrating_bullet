@@ -1,5 +1,5 @@
 import sympy
-import argparse
+from probe import show
 
 from rhd import (
     derive_hydro_eqns,
@@ -11,11 +11,12 @@ from rhd import (
     eta,
     eos)
 
+df = sympy.Symbol('delta f', real=True)
+dpsi = sympy.Symbol('delta psi', real=True)
+
 def calc_acoustic_equations():
 
     epsilon = sympy.Symbol('epsilon', positive=True)
-    dpsi = sympy.Symbol('delta psi', real=True)
-    df = sympy.Symbol('delta f', real=True)
     p_0 = sympy.Symbol('p_0', positive=True)
     omega = sympy.Symbol('omega', real=True)
     k = sympy.Symbol('k', positive=True)
@@ -37,24 +38,13 @@ def calc_acoustic_equations():
 
 def calc_dispersion_matrix():
 
+    _ = calc_acoustic_equations()
     return sympy.Matrix(
         [[itm.diff(var)
           for var in [df, dpsi]]
          for itm in _])
 
-def parse_input():
-
-    parser = argparse.ArgumentParser(
-        description='try internal functions')
-    parser.add_argument('func_name',
-                        type=str,
-                        help='name of internal function to be tested')
-    args = parser.parse_args()
-    return args.func_name
-
 if __name__ == '__main__':
 
-    func_name = parse_input()
-
-    sympy.pprint(eval(func_name+'()'))
+    show(locals())
 
