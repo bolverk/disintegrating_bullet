@@ -56,52 +56,6 @@ def calc_time_derivs(n=0):
     _ = {k:v.simplify() for k,v in _.items()}
     return _
 
-def acoustic_amplitude_ratio():
-
-    epsilon = sympy.Symbol('epsilon', positive=True)
-    dpsi = sympy.Symbol('delta psi', real=True)
-    df = sympy.Symbol('delta f', real=True)
-    p_0 = sympy.Symbol('p_0', positive=True)
-    omega = sympy.Symbol('omega', real=True)
-    k = sympy.Symbol('k', positive=True)
-    xi = sympy.Symbol('xi', positive=True)
-
-    mode = epsilon*sympy.exp(sympy.I*(k*r-omega*t))
-    ansatz = {p:p_0*(1+df*mode),
-              psi:dpsi*mode}
-
-    _ = derive_hydro_eqns(0)
-    _ = _.subs(sympy.solve(eos,e,dict=True)[0])
-    _ = _.subs(ansatz)
-    _ = _.doit()
-    assert all([itm==0 for itm in _.subs(epsilon,0)])
-    _ = _.diff(epsilon).subs(epsilon, 0)
-    _ /= p_0*mode/epsilon/(eta-1)/sympy.I
-    _.simplify()
-    dispersion_matrix = sympy.Matrix(
-        [[itm.diff(var) for itm in _]
-         for var in [df,dpsi]]).T
-    dispersion_equation = dispersion_matrix.det()
-    frequency_solutions = sympy.solve(dispersion_equation, omega)
-    _ = dispersion_matrix.subs(omega, frequency_solutions[1])
-    _ = _.subs(eta, xi**2+1)
-    _.simplify()
-    _ = _.nullspace()[0]
-    _ = _[0]/_[1]
-    _ = sympy.together(_)
-    _ = _.subs(xi, sympy.sqrt(eta-1))
-    return _
-
-def calc_planar_riemann_invariant():
-
-    q = acoustic_amplitude_ratio()
-    return p*sympy.exp(q*psi)
-
-def calc_planar_riemann_invariant_ur():
-
-    q = acoustic_amplitude_ratio()
-    return p*gamma**q
-
 if __name__ == '__main__':
 
     show(locals())
