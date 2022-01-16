@@ -79,15 +79,17 @@ def acoustic_amplitude_ratio():
     _.simplify()
     dispersion_matrix = sympy.Matrix(
         [[itm.diff(var) for itm in _]
-         for var in [df,dpsi]])
+         for var in [df,dpsi]]).T
     dispersion_equation = dispersion_matrix.det()
     frequency_solutions = sympy.solve(dispersion_equation, omega)
     _ = dispersion_matrix.subs(omega, frequency_solutions[1])
-    _ = _.subs(eta, xi+1)
+    _ = _.subs(eta, xi**2+1)
     _.simplify()
     _ = _.nullspace()[0]
-    _ = _.subs(xi, eta-1)
-    return _[0]/_[1]
+    _ = _[0]/_[1]
+    _ = sympy.together(_)
+    _ = _.subs(xi, sympy.sqrt(eta-1))
+    return _
 
 def parse_input():
 
