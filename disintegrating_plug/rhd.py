@@ -4,6 +4,7 @@ from probe import show
 
 t = sympy.Symbol('t', real=True) # Time
 r = sympy.Symbol('r', real=True) # Radius
+c = sympy.Symbol('c', positive=True) # Speed of light
 args = (t,r)
 # Energy density, pressure and rapidity
 e, p, psi, gamma = [f(*args) for f
@@ -38,8 +39,8 @@ def div(f, n):
 def derive_hydro_eqns(n=0):
 
     T = make_stress_energy_tensor()
-    energy_conservation = T[0].diff(t) + div(T[1],n)
-    momentum_conservation = T[2].diff(t) + div(T[3],n) - n*p/r
+    energy_conservation = T[0].diff(t)/c + div(T[1],n)
+    momentum_conservation = T[2].diff(t)/c + div(T[3],n) - n*p/r
     _ = [energy_conservation, momentum_conservation]
     _ = sympy.Matrix(_)
     return _
