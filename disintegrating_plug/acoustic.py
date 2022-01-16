@@ -14,12 +14,12 @@ from rhd import (
 df = sympy.Symbol('delta f', real=True)
 dpsi = sympy.Symbol('delta psi', real=True)
 omega = sympy.Symbol('omega', real=True)
+k = sympy.Symbol('k', positive=True)
 
 def calc_acoustic_equations():
 
     epsilon = sympy.Symbol('epsilon', positive=True)
     p_0 = sympy.Symbol('p_0', positive=True)
-    k = sympy.Symbol('k', positive=True)
     xi = sympy.Symbol('xi', positive=True)
 
     mode = epsilon*sympy.exp(sympy.I*(k*r-omega*t))
@@ -48,6 +48,11 @@ def calc_dispersion_equation():
 
     _ = calc_dispersion_matrix()
     return _.det()
+
+def calc_sound_speed():
+
+    _ = calc_dispersion_equation()
+    return sympy.solve(_,omega)[1]/k
 
 def calc_amplitude_ratio():
 
