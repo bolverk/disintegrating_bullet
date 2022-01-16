@@ -35,6 +35,13 @@ def calc_acoustic_equations():
     _.simplify()
     return _
 
+def calc_dispersion_matrix():
+
+    return sympy.Matrix(
+        [[itm.diff(var)
+          for var in [df, dpsi]]
+         for itm in _])
+
 def parse_input():
 
     parser = argparse.ArgumentParser(
