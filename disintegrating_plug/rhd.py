@@ -1,14 +1,15 @@
 import sympy
 import argparse
+from probe import show
 
 t = sympy.Symbol('t', real=True) # Time
 r = sympy.Symbol('r', real=True) # Radius
 args = (t,r)
 # Energy density, pressure and rapidity
-e, p, psi = [f(*args) for f
-              in sympy.symbols('e p psi',
-                               real=True,
-                               cls=sympy.Function)]
+e, p, psi, gamma = [f(*args) for f
+                    in sympy.symbols('e p psi gamma',
+                                     real=True,
+                                     cls=sympy.Function)]
 def make_lorentz_boost():
 
     gen = psi*sympy.Matrix([[0,1],
@@ -91,18 +92,16 @@ def acoustic_amplitude_ratio():
     _ = _.subs(xi, sympy.sqrt(eta-1))
     return _
 
-def parse_input():
+def calc_planar_riemann_invariant():
 
-    parser = argparse.ArgumentParser(
-        description='try internal functions')
-    parser.add_argument('func_name',
-                        type=str,
-                        help='name of internal function to be tested')
-    args = parser.parse_args()
-    return args.func_name
+    q = acoustic_amplitude_ratio()
+    return p*sympy.exp(q*psi)
+
+def calc_planar_riemann_invariant_ur():
+
+    q = acoustic_amplitude_ratio()
+    return p*gamma**q
 
 if __name__ == '__main__':
 
-    func_name = parse_input()
-
-    sympy.pprint(eval(func_name+'()'))
+    show(locals())
