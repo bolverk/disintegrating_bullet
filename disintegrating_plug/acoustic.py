@@ -3,6 +3,7 @@ from probe import show
 
 from rhd import (
     derive_hydro_eqns,
+    nu,
     r,
     t,
     e,
@@ -27,6 +28,7 @@ def calc_acoustic_equations():
               psi:dpsi*mode}
 
     _ = derive_hydro_eqns()
+    _ = _.subs(nu, 0)
     _ = _.subs(sympy.solve(eos,e,dict=True)[0])
     _ = _.subs(ansatz)
     _ = _.doit()

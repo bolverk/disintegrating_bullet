@@ -1,8 +1,9 @@
 import sympy
 import argparse
 from probe import show
-from caching import memory
+from caching import memory, luggage
 
+nu = sympy.Symbol('nu', negative=False)
 t = sympy.Symbol('t', real=True) # Time
 r = sympy.Symbol('r', real=True) # Radius
 c = sympy.Symbol('c', positive=True) # Speed of light
@@ -33,15 +34,15 @@ def make_stress_energy_tensor():
     _.simplify()
     return _
 
-def div(f, n):
+def div(f):
 
-    return (f*r**n).diff(r)/r**n
+    return (f*r**nu).diff(r)/r**nu
 
 def derive_hydro_eqns(n=0):
 
     T = make_stress_energy_tensor()
-    energy_conservation = T[0].diff(t)/c + div(T[1],n)
-    momentum_conservation = T[2].diff(t)/c + div(T[3],n) - n*p/r
+    energy_conservation = T[0].diff(t)/c + div(T[1])
+    momentum_conservation = T[2].diff(t)/c + div(T[3]) - nu*p/r
     _ = [energy_conservation, momentum_conservation]
     _ = sympy.Matrix(_)
     return _
@@ -49,9 +50,10 @@ def derive_hydro_eqns(n=0):
 eta = sympy.Symbol('eta', positive=True)
 eos = e - p/(eta-1)
 
-def calc_time_derivs(n=0):
+@luggage.memory
+def calc_time_derivs():
 
-    _ = derive_hydro_eqns(n)
+    _ = derive_hydro_eqns()
     _ = _.subs(sympy.solve(eos,e,dict=True)[0])
     _ = _.doit()
     _ = sympy.solve(_,[var.diff(t) for var in (psi,p)])
