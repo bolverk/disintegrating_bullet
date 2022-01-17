@@ -1,6 +1,7 @@
 import sympy
 from probe import show
 from my_logging import logger
+from caching import luggage
 
 from acoustic import (
     calc_amplitude_ratio,
@@ -21,6 +22,7 @@ def calc_planar_riemann_invariant():
     q = calc_amplitude_ratio()
     return sympy.log(p) + q*psi
 
+@luggage.memory
 def calc_spherical_riemann_invariant():
 
     beta = sympy.Symbol('beta', positive=True)
