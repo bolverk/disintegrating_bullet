@@ -20,3 +20,5 @@ class Luggage:
                                  open(fname,'wb'))
             return cloudpickle.load(open(fname,'rb'))
         return hijack
+
+luggage = Luggage('luggage')

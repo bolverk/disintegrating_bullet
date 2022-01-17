@@ -1,6 +1,7 @@
 import sympy
 import argparse
 from probe import show
+from caching import memory
 
 t = sympy.Symbol('t', real=True) # Time
 r = sympy.Symbol('r', real=True) # Radius
