@@ -1,5 +1,6 @@
 import sympy
 from probe import show
+from caching import luggage
 
 from rhd import (
     nu, c, t, r, p, psi, eta
@@ -41,6 +42,7 @@ def make_equation_of_motion():
 
     return c*M*gamma(t).diff() - A*p
 
+@luggage.memory
 def calc_asymptotic_gamma():
 
     xi = sympy.Symbol('xi', positive=True)
