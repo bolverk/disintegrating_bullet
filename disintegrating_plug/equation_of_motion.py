@@ -73,6 +73,20 @@ def eval_lf_pli():
     _ = _.n()
     return _
 
+def calc_pressure_history():
+
+    xi = sympy.Symbol('xi', positive=True)
+
+    gamma_sol = calc_asymptotic_gamma()
+    ri = prepare_ri()
+    _ = sympy.solve(ri-1, p)[0]
+    _ = _.subs(gamma(t), gamma_sol)
+    _ = _.subs(eta, xi**2+1)
+    _ = sympy.expand_power_base(_, force=True)
+    _ = _.simplify()
+    _ = _.subs(xi, sympy.sqrt(eta-1))
+    return _
+
 if __name__ == '__main__':
 
     show(locals())
