@@ -5,7 +5,8 @@ from rhd import c
 from rayleigh_taylor import (
     w_0,
     rho_b0,
-    derive_fluid_frame_breakup_time
+    derive_fluid_frame_breakup_time,
+    derive_breakup_lorentz_factor
     )
 import astropy.constants as C
 import astropy.units as U
@@ -50,11 +51,9 @@ fiducial = {alpha:0.1,
             R_e:3*7e10,
             c:3e10}
 
-def estimate_breakup_radius():
+def massage(expr):
 
-    args = (L,M_e,R_e,c,w_0)
-
-    _ = c*derive_fluid_frame_breakup_time()
+    _ = expr
     _ = _.subs(w_0, x)
     _ = _.subs(t_i, x/c)
     _ = _.subs(x, calc_eruption_depth())
@@ -62,11 +61,32 @@ def estimate_breakup_radius():
     _ = _.subs(rho_b0, calc_eruption_density())
     _ = _.subs(gamma_i, 1/alpha)
     _ = _.n()
+    return _
+
+def estimate_breakup_radius():
+
+    args = (L,M_e,R_e,c,w_0)
+
+    _ = c*derive_fluid_frame_breakup_time()
+    _ = massage(_)
     expr = _.subs(omega, 3)
     _ = _.subs(fiducial)
     f = sympy.lambdify(args, _)
     value = f(*(itm.subs(fiducial) for itm in args))
     return [expr, value, value/7e10*sympy.Symbol(r'R_{\odot}')]
+
+def estimate_breakup_lorentz_factor():
+
+    args = (L,M_e,R_e,c,w_0)
+
+    _ = derive_breakup_lorentz_factor()
+    _ = massage(_)
+    _ = _.n()
+    expr = _.subs(omega, 3)
+    _ = _.subs(fiducial)
+    f = sympy.lambdify(args, _)
+    value = f(*(itm.subs(fiducial) for itm in args))
+    return [expr, value]
 
 if __name__ == '__main__':
 
