@@ -52,6 +52,13 @@ def derive_breakup_lorentz_factor():
     _ = _.simplify()
     return _
 
+def derive_observer_time_breakup():
+
+    t = derive_fluid_frame_breakup_time()
+    g = derive_breakup_lorentz_factor()
+    _ = t/g**2
+    return _
+
 if __name__ == '__main__':
 
     show(locals())
