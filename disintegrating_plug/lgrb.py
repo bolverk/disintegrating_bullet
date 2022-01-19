@@ -23,6 +23,23 @@ def calc_eruption_depth():
     _ = _.subs(rho_a, calc_hydrostatic_density())
     return sympy.solve(_, x)[0]
 
+def calc_eruption_density():
+
+    _ = calc_hydrostatic_density()
+    _ = _.subs(x, calc_eruption_depth())
+    _ = sympy.expand_power_base(_, force=True)
+    _ = _.simplify()
+    return _
+
+def calc_eruption_mass():
+
+    _ = calc_eruption_density()
+    _ = _*x**3
+    _ = _.subs(x, calc_eruption_depth())
+    _ = sympy.expand_power_base(_, force=True)
+    _ = _.simplify()
+    return _
+
 if __name__ == '__main__':
 
     show(locals())
