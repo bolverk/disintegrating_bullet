@@ -17,6 +17,12 @@ def eruption_criterion():
 
     return L/(alpha**2*x**2*c) - rho_a*c**2/alpha**4
 
+def calc_eruption_depth():
+
+    _ = eruption_criterion()
+    _ = _.subs(rho_a, calc_hydrostatic_density())
+    return sympy.solve(_, x)[0]
+
 if __name__ == '__main__':
 
     show(locals())
