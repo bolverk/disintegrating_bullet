@@ -4,7 +4,7 @@ from probe import show
 from caching import memory, luggage
 
 nu = sympy.Symbol('nu', negative=False)
-t = sympy.Symbol('t', real=True) # Time
+t = sympy.Symbol('t', positive=True) # Time
 r = sympy.Symbol('r', real=True) # Radius
 c = sympy.Symbol('c', positive=True) # Speed of light
 args = (t,r)
