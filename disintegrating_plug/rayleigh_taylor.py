@@ -10,6 +10,7 @@ from equation_of_motion import (
 
 alpha = sympy.Symbol('alpha')
 rho_b0 = sympy.Symbol('rho_b0', positive=True)
+w_0 = sympy.Symbol('w_0', positive=True)
 
 @memory.cache
 def derive_instability_growth():
@@ -23,6 +24,7 @@ def derive_instability_growth():
     _ = _.subs(rho_b1, gamma_i*rho_b0)
     _ = _.subs(k, 1/w)
     _ = _.subs(w, w_1*(p_i/p)**(1/eta)*(t_i/t)**2)
+    _ = _.subs(w_1, w_0/gamma_i)
     _ = _.subs(aprime, c*gamma(t)/t)
     _ = _.subs(tprime, t/gamma(t))
     _ = _.subs(gamma(t), calc_asymptotic_gamma())
