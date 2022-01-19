@@ -42,6 +42,16 @@ def derive_fluid_frame_breakup_time():
     _ = _.simplify()
     return _
 
+def derive_breakup_lorentz_factor():
+
+    _ = calc_asymptotic_gamma()
+    _ = _.subs({nu:2, eta:sympy.Rational(4,3)})
+    _ = _.subs(t, derive_fluid_frame_breakup_time())
+    _ = _.subs(p_i, rho_b0*c**2*gamma_i**4)
+    _ = sympy.expand_power_base(_, force=True)
+    _ = _.simplify()
+    return _
+
 if __name__ == '__main__':
 
     show(locals())
