@@ -52,7 +52,7 @@ def derive_breakup_lorentz_factor():
     _ = _.simplify()
     return _
 
-def derive_observer_time_breakup():
+def derive_observer_breakup_time():
 
     t = derive_fluid_frame_breakup_time()
     g = derive_breakup_lorentz_factor()
