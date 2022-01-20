@@ -17,6 +17,10 @@ def make_eruption_density():
 
     return alpha**2*L/(h_e**2*c**3)
 
+def make_eruption_mass():
+
+    return alpha**4*L*h_e/c**3
+
 if __name__ == '__main__':
 
     show(locals())
